@@ -1,9 +1,14 @@
 package com.prashant.dependecyinjection.app
 
+import android.content.Context
 import com.prashant.dependecyinjection.apicallings.ApiService
+import com.prashant.dependecyinjection.repo.Repo
+import com.prashant.dependecyinjection.roomdb.NoteDao
+import com.prashant.dependecyinjection.roomdb.NoteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,4 +32,10 @@ object DiObject {
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideRepo(@ApplicationContext context: Context): Repo =
+        Repo(NoteDatabase.getInstance(context).noteDao())
+
 }
